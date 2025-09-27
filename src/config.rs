@@ -6,6 +6,7 @@ pub struct AppConfig {
     pub database_url: String,
     #[serde(default = "default_leptos_env")]
     pub leptos_env: String,
+    pub server_port: String,
 }
 
 fn default_leptos_env() -> String {

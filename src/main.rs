@@ -8,10 +8,10 @@ use leptos_axum::LeptosRoutes;
 
 #[tokio::main]
 async fn main() -> Result<()> {
-    // 1) Config z pliku (ignorowanego w repo)
+    // 1) Config from file (ignored in repo)
     let cfg = config::AppConfig::from_file("config/local")?;
 
-    // 2) Minimalne opcje Leptosa (tylko SSR)
+    // 2) Minimal Leptos options (SSR only)
     let mut opts = LeptosOptions::builder()
         .output_name("hello-ssr")
         .site_root("target/site")
@@ -21,16 +21,22 @@ async fn main() -> Result<()> {
         opts.env = Env::PROD;
     }
 
+    if cfg.server_port.is_empty() {
+        return Err(anyhow::anyhow!("Server port is empty"));
+    }
+
     let routes = leptos_axum::generate_route_list(App);
 
-    // 3) Router SSR
+    // 3) SSR Router
     let app = axum::Router::new()
         .leptos_routes(&opts, routes, App)
         .with_state(opts.clone());
 
-    // 4) Start serwera
+    // 4) Start server
 
-    let listener = tokio::net::TcpListener::bind("0.0.0.0:3000").await.unwrap();
+    let listener = tokio::net::TcpListener::bind(format!("0.0.0.0:{}", cfg.server_port))
+        .await
+        .unwrap();
     axum::serve(listener, app).await.unwrap();
     Ok(())
 }

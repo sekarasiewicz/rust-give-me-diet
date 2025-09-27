@@ -49,5 +49,5 @@ fn About() -> impl IntoView {
 
 #[component]
 fn NotFound() -> impl IntoView {
-    view! { <h1>"404"</h1><p>"Nie znaleziono."</p> }
+    view! { <h1>"404"</h1><p>"Not found."</p> }
 }
