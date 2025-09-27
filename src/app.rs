@@ -14,21 +14,21 @@ pub fn App() -> impl IntoView {
             <Title text="My Leptos App"/>
         </head>
         <body>
-            <header>
-                <nav>
-                    <A href="/">"Home"</A>
-                    " | "
-                    <A href="/about">"About"</A>
-                </nav>
-            </header>
-            <main>
-                <Router>
+            <Router>
+                <header>
+                    <nav>
+                        <A href="/">"Home"</A>
+                        " | "
+                        <A href="/about">"About"</A>
+                    </nav>
+                </header>
+                <main>
                     <Routes fallback=NotFound>
                         <Route path=path!("") view=Home/>
                         <Route path=path!("/about") view=About/>
                     </Routes>
-                </Router>
-            </main>
+                </main>
+            </Router>
         </body>
     }
 }
