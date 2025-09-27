@@ -6,7 +6,7 @@ use tracing::info;
 async fn main() -> anyhow::Result<()> {
     tracing_subscriber::fmt().with_env_filter("info").init();
 
-    let cfg = AppConfig::from_file("local")?;
+    let cfg = AppConfig::from_file("config/local")?;
     info!("Config loaded: {:?}", cfg);
 
     Ok(())
