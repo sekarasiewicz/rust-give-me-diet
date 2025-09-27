@@ -1,0 +1,8 @@
+[package]
+name = "rust-give-me-diet"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+config = "0.15.17"
+serde = "1.0.227"
