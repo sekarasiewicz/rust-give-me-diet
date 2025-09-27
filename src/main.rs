@@ -3,8 +3,7 @@ mod config;
 
 use anyhow::Result;
 use app::App;
-use leptos::prelude::LeptosOptions;
-use leptos::prelude::*;
+use leptos::prelude::{Env, LeptosOptions};
 use leptos_axum::LeptosRoutes;
 
 #[tokio::main]

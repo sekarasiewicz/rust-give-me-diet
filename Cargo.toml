@@ -9,6 +9,8 @@ axum = "0.8.4"
 config = "0.15.17"
 leptos = { version = "0.8.9", features = ["ssr"] }
 leptos_axum = "0.8.6"
+leptos_meta = "0.8.5"
+leptos_router = "0.8.7"
 serde = { version = "1.0.227", features = ["derive"] }
 tokio = { version = "1.47.1", features = ["rt-multi-thread", "macros"] }
 tracing = "0.1.41"
