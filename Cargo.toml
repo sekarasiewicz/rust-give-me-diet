@@ -1,13 +1,13 @@
 [package]
 name = "rust-give-me-diet"
 version = "0.1.0"
-edition = "2025"
+edition = "2024"
 
 [dependencies]
 anyhow = "1.0.100"
 axum = "0.8.4"
 config = "0.15.17"
-leptos = { version = "0.8.9", features = ["ssr"] }
+leptos = { version = "0.8.9", features = ["ssr", "csr"] }
 leptos_axum = "0.8.6"
 leptos_meta = "0.8.5"
 leptos_router = "0.8.7"
@@ -23,3 +23,14 @@ cargo-leptos = "0.2.44"
 [profile.release]
 lto = "thin"
 codegen-units = 1
+
+[package.metadata.leptos]
+output-name  = "rust-give-me-diet"      # how the client bundle is named
+site-root    = "target/site"   # root for generated site
+site-pkg-dir = "pkg"           # where client .wasm/.js go inside site-root
+assets-dir   = "assets"        # static assets served from /assets/*
+site-addr    = "127.0.0.1:3000"
+reload-port  = 3001
+
+[lib]
+crate-type = ["cdylib", "rlib"]

@@ -1,7 +1,9 @@
+use crate::greet;
 use leptos::prelude::*;
+use leptos::*;
 use leptos_meta::*;
-use leptos_router::components::{A, Route, Router, Routes};
-use leptos_router::path;
+use leptos_router::components::{Route, Router, Routes};
+use leptos_router::*;
 
 #[component]
 pub fn App() -> impl IntoView {
@@ -9,20 +11,15 @@ pub fn App() -> impl IntoView {
 
     view! {
         <head>
-            <Meta charset="utf-8"/>
-            <Meta name="viewport" content="width=device-width, initial-scale=1"/>
-            <Title text="My Leptos App"/>
+            <meta charset="utf-8"/>
+            <meta name="viewport" content="width=device-width, initial-scale=1"/>
+            <link rel="stylesheet" href="/assets/style.css"/>
+            <Title text="Leptos SSR + Tailwind"/>
+            <Script src="/pkg/rust-give-me-diet.js"/>  // wstrzykuje bundle klienta (cargo-leptos)
         </head>
-        <body>
+        <body class="bg-slate-50">
             <Router>
-                <header>
-                    <nav class="bg-gray-800 p-4">
-                        <A href="/">"Home"</A>
-                        " | "
-                        <A href="/about">"About"</A>
-                    </nav>
-                </header>
-                <main>
+                <main class="mx-auto max-w-xl p-6 space-y-6">
                     <Routes fallback=NotFound>
                         <Route path=path!("") view=Home/>
                         <Route path=path!("/about") view=About/>
@@ -35,19 +32,62 @@ pub fn App() -> impl IntoView {
 
 #[component]
 fn Home() -> impl IntoView {
-    view! { <h1>"Hello World"</h1> }
-}
+    // lokalny stan (hydration)
+    let (count, set_count) = signal(0);
 
-#[component]
-fn About() -> impl IntoView {
+    // server action -> #[server] greet
+    let (name, set_name) = signal(String::new());
+    let greet_action = Action::new(move |n: &String| {
+        let n = n.clone();
+        async move { greet(n).await.ok() }
+    });
+    let on_submit = move |e: web_sys::SubmitEvent| {
+        e.prevent_default();
+        if !name.get().trim().is_empty() {
+            greet_action.dispatch(name.get());
+        }
+    };
+
     view! {
-        <Title text="About · Hello SSR"/>
-        <h1>"About"</h1>
-        <p>"Minimal Leptos 0.8 + Axum 0.8."</p>
+        <section class="space-y-3">
+            <h1 class="text-3xl font-bold text-slate-900">"Hello"</h1>
+
+            <div class="space-x-2">
+                <button
+                    class="rounded bg-indigo-600 px-4 py-2 text-white hover:bg-indigo-500"
+                    on:click=move |_| set_count.update(|n| *n += 1)
+                >"Increment"</button>
+                <span class="text-slate-700">{move || format!("Count = {}", count.get())}</span>
+            </div>
+
+            <form class="flex gap-2" on:submit=on_submit>
+                <input
+                    class="flex-1 rounded border border-slate-300 px-3 py-2"
+                    type="text"
+                    placeholder="Your name"
+                    on:input=move |e| set_name.set(event_target_value(&e))
+                    prop:value=name
+                />
+                <button class="rounded bg-emerald-600 px-4 py-2 text-white hover:bg-emerald-500" type="submit">
+                    "Greet"
+                </button>
+            </form>
+
+            <Show when=move || greet_action.value().get().is_some()>
+                <p class="rounded bg-white p-3 shadow">
+                    {move || greet_action.value().get().flatten().unwrap_or_default()}
+                </p>
+            </Show>
+        </section>
     }
 }
 
 #[component]
+fn About() -> impl IntoView {
+    view! { <h1 class="text-2xl font-semibold">"About"</h1> }
+}
+
+#[component]
 fn NotFound() -> impl IntoView {
-    view! { <h1>"404"</h1><p>"Not found."</p> }
+    view! { <h1 class="text-xl text-red-600">"404 – Not found"</h1> }
 }
