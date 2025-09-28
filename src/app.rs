@@ -16,7 +16,7 @@ pub fn App() -> impl IntoView {
         <body>
             <Router>
                 <header>
-                    <nav>
+                    <nav class="bg-gray-800 p-4">
                         <A href="/">"Home"</A>
                         " | "
                         <A href="/about">"About"</A>

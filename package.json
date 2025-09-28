@@ -1,0 +1,23 @@
+{
+  "name": "rust-give-me-diet",
+  "version": "1.0.0",
+  "description": "A modern web application built with Rust, featuring server-side rendering (SSR) using Leptos and Axum.",
+  "homepage": "https://github.com/sekarasiewicz/rust-give-me-diet#readme",
+  "bugs": {
+    "url": "https://github.com/sekarasiewicz/rust-give-me-diet/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sekarasiewicz/rust-give-me-diet.git"
+  },
+  "license": "ISC",
+  "author": "Sebastian Karasiewicz",
+  "scripts": {
+    "tw:build": "npx @tailwindcss/cli -i ./assets/input.css -o ./assets/style.css --minify",
+    "tw:watch": "npx @tailwindcss/cli -i ./assets/input.css -o ./assets/style.css --watch"
+  },
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.1.13",
+    "tailwindcss": "^4.1.13"
+  }
+}
