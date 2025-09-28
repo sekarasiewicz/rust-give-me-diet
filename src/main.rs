@@ -4,7 +4,7 @@ mod config;
 use anyhow::Result;
 use app::App;
 use leptos::prelude::{Env, LeptosOptions};
-use leptos_axum::LeptosRoutes;
+use leptos_axum::{LeptosRoutes, generate_route_list};
 use tower_http::services::ServeDir;
 
 #[tokio::main]
@@ -14,7 +14,7 @@ async fn main() -> Result<()> {
 
     // 2) Minimal Leptos options (SSR only)
     let mut opts = LeptosOptions::builder()
-        .output_name("hello-ssr")
+        .output_name("rust-give-me-diet")
         .site_root("target/site")
         .build();
 
@@ -26,7 +26,7 @@ async fn main() -> Result<()> {
         return Err(anyhow::anyhow!("Server port is empty"));
     }
 
-    let routes = leptos_axum::generate_route_list(App);
+    let routes = generate_route_list(App);
 
     // 3) SSR Router
     let app = axum::Router::new()
