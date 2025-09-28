@@ -1,18 +1,10 @@
 mod app;
 mod config;
 
-use leptos::prelude::ServerFnError;
-use leptos::server;
-
 use anyhow::Result;
 use app::App;
 use leptos::prelude::{Env, LeptosOptions};
 use leptos_axum::LeptosRoutes;
-
-#[server(Greet, "/api")]
-pub async fn greet(name: String) -> Result<String, ServerFnError> {
-    Ok(format!("Hello, {}!", name))
-}
 
 #[tokio::main]
 async fn main() -> Result<()> {
