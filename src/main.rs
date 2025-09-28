@@ -5,6 +5,7 @@ use anyhow::Result;
 use app::App;
 use leptos::prelude::{Env, LeptosOptions};
 use leptos_axum::LeptosRoutes;
+use tower_http::services::ServeDir;
 
 #[tokio::main]
 async fn main() -> Result<()> {
@@ -29,6 +30,8 @@ async fn main() -> Result<()> {
 
     // 3) SSR Router
     let app = axum::Router::new()
+        .nest_service("/assets", ServeDir::new("assets"))
+        .nest_service("/pkg", ServeDir::new("target/site/pkg"))
         .leptos_routes(&opts, routes, App)
         .with_state(opts.clone());
 
