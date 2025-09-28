@@ -13,7 +13,7 @@ pub fn App() -> impl IntoView {
             <meta name="viewport" content="width=device-width, initial-scale=1"/>
             <link rel="stylesheet" href="/assets/style.css"/>
             <Title text="Leptos SSR + Tailwind"/>
-            <Script src="/pkg/rust-give-me-diet.js"/>  // wstrzykuje bundle klienta (cargo-leptos)
+            <script type="module" src="/pkg/rust-give-me-diet.js"></script>  // wstrzykuje bundle klienta (cargo-leptos)
         </head>
         <body class="bg-slate-50">
             <Router>
@@ -39,6 +39,7 @@ fn Home() -> impl IntoView {
 
             <div class="space-x-2">
                 <button
+                    type="button"
                     class="rounded bg-indigo-600 px-4 py-2 text-white hover:bg-indigo-500"
                     on:click=move |_| set_count.update(|n| *n += 1)
                 >"Increment"</button>
