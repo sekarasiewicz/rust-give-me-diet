@@ -5,17 +5,17 @@ edition = "2024"
 
 [dependencies]
 anyhow = "1.0.100"
-axum = "0.8.4"
+axum = { version = "0.8.4", optional = true }
 config = "0.15.17"
 leptos = { version = "0.8.9", features = ["ssr", "csr"] }
-leptos_axum = "0.8.6"
+leptos_axum = { version = "0.8.6", optional = true }
 leptos_meta = "0.8.5"
 leptos_router = "0.8.7"
 serde = { version = "1.0.227", features = ["derive"] }
-tokio = { version = "1.47.1", features = ["rt-multi-thread", "macros"] }
-tower-http = "0.6.6"
+tokio = { version = "1.47.1", features = ["rt", "macros"], default-features = false }
+tower-http = { version = "0.6.6", optional = true }
 tracing = "0.1.41"
-tracing-subscriber = { version = "0.3.20", features = ["env-filter", "fmt"] }
+tracing-subscriber = { version = "0.3.20", features = ["env-filter", "fmt"], optional = true }
 
 [build-dependencies]
 cargo-leptos = "0.2.44"
@@ -31,6 +31,17 @@ site-pkg-dir = "pkg"           # where client .wasm/.js go inside site-root
 assets-dir   = "assets"        # static assets served from /assets/*
 site-addr    = "127.0.0.1:3000"
 reload-port  = 3001
+bin-features = ["ssr"]
 
 [lib]
 crate-type = ["cdylib", "rlib"]
+
+[features]
+default = ["ssr"]
+ssr = ["leptos/ssr", "leptos_axum", "axum", "tower-http", "tracing-subscriber", "tokio/net", "tokio/rt-multi-thread"]
+csr = ["leptos/csr"]
+
+[[bin]]
+name = "rust-give-me-diet"
+required-features = ["ssr"]
+

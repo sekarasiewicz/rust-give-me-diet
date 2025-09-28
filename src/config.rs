@@ -3,6 +3,7 @@ use serde::Deserialize;
 
 #[derive(Debug, Deserialize, Clone)]
 pub struct AppConfig {
+    #[allow(dead_code)]
     pub database_url: String,
     #[serde(default = "default_leptos_env")]
     pub leptos_env: String,
