@@ -13,25 +13,30 @@ pub fn App() -> impl IntoView {
             <meta name="viewport" content="width=device-width, initial-scale=1"/>
             <link rel="stylesheet" href="/assets/style.css"/>
             <Title text="Leptos SSR + Tailwind"/>
-            <script type="module" src="/pkg/rust-give-me-diet.js"></script>  // wstrzykuje bundle klienta (cargo-leptos)
+            <script type="module" src="/pkg/rust-give-me-diet.js"></script>
         </head>
         <body class="bg-slate-50">
-            <Router>
-                <main class="mx-auto max-w-xl p-6 space-y-6">
-                    <Routes fallback=NotFound>
-                        <Route path=path!("") view=Home/>
-                        <Route path=path!("/about") view=About/>
-                    </Routes>
-                </main>
-            </Router>
+            <div id="app">
+                <Router>
+                    <main class="mx-auto max-w-xl p-6 space-y-6">
+                        <Routes fallback=|| view! { <NotFound/> }>
+                            <Route path=path!("") view=Home/>
+                            <Route path=path!("/about") view=About/>
+                        </Routes>
+                    </main>
+                </Router>
+            </div>
         </body>
     }
 }
 
 #[component]
 fn Home() -> impl IntoView {
-    // lokalny stan (hydration)
     let (count, set_count) = signal(0);
+
+    let increment = move |_| {
+        set_count.update(|n| *n += 1);
+    };
 
     view! {
         <section class="space-y-3">
@@ -41,9 +46,11 @@ fn Home() -> impl IntoView {
                 <button
                     type="button"
                     class="rounded bg-indigo-600 px-4 py-2 text-white hover:bg-indigo-500"
-                    on:click=move |_| set_count.update(|n| *n += 1)
+                    on:click=increment
                 >"Increment"</button>
-                <span class="text-slate-700">{move || format!("Count = {}", count.get())}</span>
+                <span class="text-slate-700">
+                    {move || format!("Count = {}", count.get())}
+                </span>
             </div>
 
         </section>
